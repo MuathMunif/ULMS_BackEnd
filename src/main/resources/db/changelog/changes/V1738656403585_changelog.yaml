@@ -1,0 +1,484 @@
+databaseChangeLog:
+- changeSet:
+    id: 1738656406277-1
+    author: muath (generated)
+    changes:
+    - createSequence:
+        incrementBy: 1
+        sequenceName: acc_sq
+        startValue: 1
+- changeSet:
+    id: 1738656406277-2
+    author: muath (generated)
+    changes:
+    - createSequence:
+        incrementBy: 1
+        sequenceName: attach_sq
+        startValue: 1
+- changeSet:
+    id: 1738656406277-3
+    author: muath (generated)
+    changes:
+    - createSequence:
+        incrementBy: 1
+        sequenceName: book_sq
+        startValue: 1
+- changeSet:
+    id: 1738656406277-4
+    author: muath (generated)
+    changes:
+    - createSequence:
+        incrementBy: 50
+        sequenceName: category_SEQ
+        startValue: 1
+- changeSet:
+    id: 1738656406277-5
+    author: muath (generated)
+    changes:
+    - createSequence:
+        incrementBy: 1
+        sequenceName: uni_sq
+        startValue: 1
+- changeSet:
+    id: 1738656406277-6
+    author: muath (generated)
+    changes:
+    - createSequence:
+        incrementBy: 1
+        sequenceName: user_sq
+        startValue: 1
+- changeSet:
+    id: 1738656406277-7
+    author: muath (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: access_universityPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            defaultValueBoolean: false
+            name: deleted
+            type: BOOLEAN
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: relation_type
+            type: VARCHAR(255)
+        - column:
+            name: status
+            type: VARCHAR(255)
+        - column:
+            name: university_id
+            type: BIGINT
+        - column:
+            name: user_id
+            type: BIGINT
+        tableName: access_university
+- changeSet:
+    id: 1738656406277-8
+    author: muath (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: attachmentPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            defaultValueBoolean: false
+            name: deleted
+            type: BOOLEAN
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: file_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: file_path
+            type: VARCHAR(255)
+        - column:
+            name: file_size
+            type: VARCHAR(255)
+        - column:
+            name: file_type
+            type: VARCHAR(255)
+        tableName: attachment
+- changeSet:
+    id: 1738656406277-9
+    author: muath (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: bookPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            defaultValueBoolean: false
+            name: deleted
+            type: BOOLEAN
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: author
+            type: VARCHAR(255)
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: publish_date
+            type: date
+        - column:
+            constraints:
+              nullable: false
+            name: title
+            type: VARCHAR(255)
+        - column:
+            name: version
+            type: VARCHAR(255)
+        - column:
+            name: attachment_id
+            type: BIGINT
+        - column:
+            name: category_id
+            type: BIGINT
+        - column:
+            name: universty_id
+            type: BIGINT
+        tableName: book
+- changeSet:
+    id: 1738656406277-10
+    author: muath (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: categoryPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            defaultValueBoolean: false
+            name: deleted
+            type: BOOLEAN
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: title
+            type: VARCHAR(255)
+        - column:
+            name: university_id
+            type: BIGINT
+        tableName: category
+- changeSet:
+    id: 1738656406277-11
+    author: muath (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: universityPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            defaultValueBoolean: false
+            name: deleted
+            type: BOOLEAN
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: domain
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: library_name
+            type: VARCHAR(255)
+        - column:
+            name: location
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        tableName: university
+- changeSet:
+    id: 1738656406277-12
+    author: muath (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: usersPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            defaultValueBoolean: false
+            name: deleted
+            type: BOOLEAN
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: full_name
+            type: VARCHAR(255)
+        - column:
+            name: user_role
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: user_name
+            type: VARCHAR(255)
+        tableName: users
+- changeSet:
+    id: 1738656406277-13
+    author: muath (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: university_id
+        constraintName: UC_ACCESS_UNIVERSITYUNIVERSITY_ID_COL
+        tableName: access_university
+- changeSet:
+    id: 1738656406277-14
+    author: muath (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: user_id
+        constraintName: UC_ACCESS_UNIVERSITYUSER_ID_COL
+        tableName: access_university
+- changeSet:
+    id: 1738656406277-15
+    author: muath (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: attachment_id
+        constraintName: UC_BOOKATTACHMENT_ID_COL
+        tableName: book
+- changeSet:
+    id: 1738656406277-16
+    author: muath (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: category_id
+        constraintName: UC_BOOKCATEGORY_ID_COL
+        tableName: book
+- changeSet:
+    id: 1738656406277-17
+    author: muath (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: domain
+        constraintName: UC_UNIVERSITYDOMAIN_COL
+        tableName: university
+- changeSet:
+    id: 1738656406277-18
+    author: muath (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: email
+        constraintName: UC_UNIVERSITYEMAIL_COL
+        tableName: university
+- changeSet:
+    id: 1738656406277-19
+    author: muath (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: email
+        constraintName: UC_USERSEMAIL_COL
+        tableName: users
+- changeSet:
+    id: 1738656406277-20
+    author: muath (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: user_name
+        constraintName: UC_USERSUSER_NAME_COL
+        tableName: users
+- changeSet:
+    id: 1738656406277-21
+    author: muath (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: attachment_id
+        baseTableName: book
+        constraintName: FK4p7tkf43n93m8luc6qr7r8tjr
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: attachment
+        validate: true
+- changeSet:
+    id: 1738656406277-22
+    author: muath (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: category_id
+        baseTableName: book
+        constraintName: FKam9riv8y6rjwkua1gapdfew4j
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: category
+        validate: true
+- changeSet:
+    id: 1738656406277-23
+    author: muath (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: access_university
+        constraintName: FKe7gryud971uqk757no5g6syi2
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+- changeSet:
+    id: 1738656406277-24
+    author: muath (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: university_id
+        baseTableName: access_university
+        constraintName: FKluocuewc3k2ta3xado9my7uy0
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: university
+        validate: true
+- changeSet:
+    id: 1738656406277-25
+    author: muath (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: universty_id
+        baseTableName: book
+        constraintName: FKmgb3kjwih1i2vvvdce3e2brbc
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: university
+        validate: true
+- changeSet:
+    id: 1738656406277-26
+    author: muath (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: university_id
+        baseTableName: category
+        constraintName: FKmx3uh2grdf0gmq5lovkg8ww3a
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: university
+        validate: true
+

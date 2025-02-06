@@ -1,7 +1,16 @@
+import org.yaml.snakeyaml.Yaml
+
+buildscript {
+    dependencies {
+        classpath 'org.yaml:snakeyaml:2.0'
+    }
+}
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.liquibase.gradle' version '2.2.0'
+
 }
 
 group = 'seu'
@@ -14,6 +23,7 @@ java {
 }
 
 configurations {
+    liquibaseRuntime.extendsFrom runtimeClasspath
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -25,9 +35,15 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.liquibase:liquibase-core:4.24.0'
+    implementation "org.liquibase.ext:liquibase-hibernate6:4.24.0"
+    liquibaseRuntime sourceSets.main.runtimeClasspath
+    liquibaseRuntime sourceSets.main.output
+    liquibaseRuntime 'org.postgresql:postgresql'
+    liquibaseRuntime 'info.picocli:picocli:4.7.6'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
@@ -36,6 +52,23 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+
+
+def appProperties = new Yaml().load(file("src/main/resources/application.yml").newInputStream())
+def liquibaseProperties = new Yaml().load(file("src/main/resources/liquibase.yaml").newInputStream())
+
+
+liquibase {
+    activities {
+        main {
+            changelogFile 'src/main/resources/db/changelog/changes/V' + System.currentTimeMillis() +
+                    '_changelog.yaml'
+            referenceUrl 'hibernate:spring:' + liquibaseProperties.getAt("entities-package-path") + '?dialect=' + liquibaseProperties.dialect
+            url appProperties.spring.datasource.url
+            username appProperties.spring.datasource.username
+            password appProperties.spring.datasource.password
+            driver liquibaseProperties.driver
+        }
+    }
 }
+
