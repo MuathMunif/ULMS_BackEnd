@@ -1,4 +1,4 @@
-package seu.ulms.conifg;
+package seu.ulms.config;
 
 import org.springframework.data.domain.AuditorAware;
 

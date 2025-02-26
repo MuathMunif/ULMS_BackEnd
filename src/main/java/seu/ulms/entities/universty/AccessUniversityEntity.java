@@ -43,5 +43,4 @@ public class AccessUniversityEntity extends BasesAudit implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private EStatus status;
-
 }

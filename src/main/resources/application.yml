@@ -1,3 +1,6 @@
+server:
+  port: 9090
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/ulms_local
@@ -12,7 +15,35 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
   liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/changelog-master.yaml
-#    clear-checksums: true
+    enabled: false
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    clear-checksums: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: umls
+            #            client-secret: myclientsecret
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
+            provider: keycloak
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/dev
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/realms/dev/protocol/openid-connect/certs
+
+# ✅ إضافة إعدادات Keycloak Admin Client
+keycloak:
+  auth-server-url: http://localhost:8080
+  realm: dev  # تأكد أنه نفس الاسم في Keycloak
+  client-id: umls-admin
+  client-secret: pqlup7oMaQH1OYpeFWUKXbHcDWS0zbPe
+  scope: open-id
+  grant-type: client_credentials

@@ -47,8 +47,4 @@ public class BookEntity extends BasesAudit implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
-
-
-
-
 }

@@ -35,5 +35,4 @@ public class CategoryEntity extends BasesAudit implements Serializable {
     @JoinColumn(name = "university_id")
     private UniversityEntity university;
 
-
 }

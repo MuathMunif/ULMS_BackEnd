@@ -1,4 +1,4 @@
-package seu.ulms.conifg;
+package seu.ulms.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

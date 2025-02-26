@@ -1,0 +1,47 @@
+package seu.ulms.controllers.university;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import seu.ulms.dto.university.UniversityDto;
+import seu.ulms.services.university.UniversityService;
+import seu.ulms.dto.UniversityCreationDto;
+
+
+@RestController
+@RequestMapping("/universities")
+@RequiredArgsConstructor
+public class UniversityController {
+
+    private final UniversityService universityService;
+
+    // ✅ يسمح فقط للأدمن بإنشاء جامعة جديدة
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/create")
+    public ResponseEntity<UniversityDto> createUniversity(@RequestBody @Valid UniversityCreationDto university) {
+        return ResponseEntity.ok(universityService.createUniversity(university));
+    }
+
+    // ✅ يسمح للأدمن والممثلين برؤية الجامعات مع دعم Pagination
+    @PreAuthorize("hasAnyRole('ADMIN', 'UNIVERSITY_REPRESENTATIVE')")
+    @GetMapping
+    public ResponseEntity<Page<UniversityDto>> getAllUniversities(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Pageable pageable) {
+        Page<UniversityDto> universities = universityService.getAllUniversities(pageable);
+        return ResponseEntity.ok(universities);
+    }
+
+    // ✅ يسمح فقط للأدمن بحذف جامعة
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUniversity(@PathVariable Long id) {
+        universityService.deleteUniversity(id);
+        return ResponseEntity.noContent().build();  // ✅ 204 No Content
+    }
+}
