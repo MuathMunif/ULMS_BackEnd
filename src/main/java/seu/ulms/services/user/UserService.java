@@ -1,5 +1,6 @@
 package seu.ulms.services.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import seu.ulms.dto.user.UserDto;
 import seu.ulms.entities.user.UserEntity;
@@ -11,23 +12,21 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserMapper userMapper;
 
     public UserDto createUser(UserDto userDTO) {
-        UserEntity userEntity = UserMapper.toEntity(userDTO);
+        UserEntity userEntity = userMapper.toEntity(userDTO);
         UserEntity savedUser = userRepository.save(userEntity);
-        return UserMapper.toDTO(savedUser);
+        return userMapper.toDto(savedUser);
     }
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(UserMapper::toDTO)
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -37,6 +36,10 @@ public class UserService {
 
     public Optional<UserDto> getUserById(Long id) {
         return userRepository.findById(id)
-                .map(UserMapper::toDTO);
+                .map(userMapper::toDto);
+    }
+
+    public UserDto getUserByUsername(String username) {
+        return userMapper.toDto(userRepository.findByUsername(username).orElseThrow(RuntimeException::new));
     }
 }

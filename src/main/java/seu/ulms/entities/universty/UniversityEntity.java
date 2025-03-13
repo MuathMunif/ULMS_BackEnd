@@ -46,8 +46,8 @@ public class UniversityEntity extends BasesAudit implements Serializable {
     @OneToMany(mappedBy = "university")
     private List<BookEntity> bookList;
 
-    // اضافه من عندي
 
+    // اضافه من عندي
     @OneToOne(mappedBy = "university")
     private AccessUniversityEntity accessUniversity;
 }

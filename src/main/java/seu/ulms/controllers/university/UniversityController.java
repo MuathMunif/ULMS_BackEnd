@@ -7,9 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import seu.ulms.dto.university.UniversityCreationDto;
 import seu.ulms.dto.university.UniversityDto;
 import seu.ulms.services.university.UniversityService;
-import seu.ulms.dto.UniversityCreationDto;
+
 
 
 @RestController

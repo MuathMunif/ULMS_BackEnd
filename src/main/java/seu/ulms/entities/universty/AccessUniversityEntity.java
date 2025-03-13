@@ -32,7 +32,7 @@ public class AccessUniversityEntity extends BasesAudit implements Serializable {
     @JoinColumn(name = "university_id")
     private UniversityEntity university;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 

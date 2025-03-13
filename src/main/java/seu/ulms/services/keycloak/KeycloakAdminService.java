@@ -26,7 +26,7 @@ public class KeycloakAdminService {
     @Value("${keycloak.realm}")
     private String REALM;
 
-    // 🔹 إنشاء مستخدم جديد باستخدام UserDTO
+    //  إنشاء مستخدم جديد باستخدام UserDTO
     public ResponseEntity<String> createUser(UserDto userDTO) {
         UserRepresentation user = new UserRepresentation();
         user.setUsername(userDTO.getUsername());
@@ -89,7 +89,7 @@ public class KeycloakAdminService {
         }
     }
 
-    // 🔹 إرسال رابط لإعادة تعيين كلمة المرور
+    //  إرسال رابط لإعادة تعيين كلمة المرور
     public ResponseEntity<String> triggerResetPasswordEmail(String username) {
         try {
             List<UserRepresentation> users = keycloak.realm(REALM).users().search(username);
@@ -108,7 +108,7 @@ public class KeycloakAdminService {
         }
     }
 
-    // 🔹 إرسال رابط لتفعيل البريد الإلكتروني
+    //  إرسال رابط لتفعيل البريد الإلكتروني
     public ResponseEntity<String> triggerVerifyEmail(String username) {
         try {
             List<UserRepresentation> users = keycloak.realm(REALM).users().search(username);

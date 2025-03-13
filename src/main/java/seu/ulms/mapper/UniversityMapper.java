@@ -2,9 +2,10 @@ package seu.ulms.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import seu.ulms.dto.university.UniversityCreationDto;
 import seu.ulms.dto.university.UniversityDto;
 import seu.ulms.entities.universty.UniversityEntity;
-import seu.ulms.dto.UniversityCreationDto;
+
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {AccessUniversityMapper.class}) // ✅ تضمين AccessUniversityMapper
