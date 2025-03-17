@@ -24,31 +24,19 @@ public class RegistrationStudentService {
 
     @Transactional
     public RegistrationStudentDto registerStudent(RegistrationStudentDto studentDto) {
-        //  التحقق مما إذا كان المستخدم موجودًا في النظام
-        if (userRepository.findByEmail(studentDto.getEmail()).isPresent()) {
+        UserEntity user =userRepository.findByEmail(studentDto.getEmail()).orElse(new UserEntity());
+        if (user.getUsername().equals(studentDto.getUsername())
+                || user.getEmail().equals(studentDto.getEmail())) {
             throw new RuntimeException("User already registered in the system!");
         }
-
-        // حفظ بيانات الطالب في قاعدة البيانات
-        UserEntity user = new UserEntity();
-        user.setUsername(studentDto.getUsername());
-        user.setFullName(studentDto.getFullName());
-        user.setEmail(studentDto.getEmail());
+        user = userMapper.toEntity(studentDto);
         user.setUserRole(EUserRole.STUDENT);
         userRepository.save(user);
 
-        //  تحويل المستخدم إلى `UserDto`
         UserDto userDto = userMapper.toDto(user);
-
-        //  إنشاء المستخدم في Keycloak
         keycloakAdminService.createUser(userDto);
-
-        //  إسناد دور الطالب للمستخدم
         keycloakAdminService.assignRoleToUser(userDto.getUsername(), EKeycloakRole.ROLE_STUDENT.toString());
-
-        //  إرسال رابط إعادة تعيين كلمة المرور
         keycloakAdminService.triggerResetPasswordEmail(userDto.getUsername());
-
         return studentDto;
     }
 }

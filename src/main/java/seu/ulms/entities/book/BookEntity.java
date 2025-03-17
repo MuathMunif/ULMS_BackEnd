@@ -25,14 +25,19 @@ public class BookEntity extends BasesAudit implements Serializable {
             allocationSize = 1
     )
     private Long id;
+
     @Column(name = "title", nullable = false)
     private String title;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "author")
     private String author;
+
     @Column(name = "publish_date")
     private LocalDate publishDate;
+
     @Column(name = "version")
     private String version;
 

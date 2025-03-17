@@ -17,6 +17,6 @@ public class BookDto {
     private String author;
     private LocalDate publishDate;
     private String version;
-    private String universityName; // ✅ لتخزين اسم الجامعة فقط
-    private String categoryName; // ✅ لتخزين اسم التصنيف فقط
+    private String universityName; //  لتخزين اسم الجامعة فقط
+    private String categoryName; //  لتخزين اسم التصنيف فقط
 }

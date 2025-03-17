@@ -20,14 +20,14 @@ public class UniversityController {
 
     private final UniversityService universityService;
 
-    // ✅ يسمح فقط للأدمن بإنشاء جامعة جديدة
+    //  يسمح فقط للأدمن بإنشاء جامعة جديدة
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/create")
     public ResponseEntity<UniversityDto> createUniversity(@RequestBody @Valid UniversityCreationDto university) {
         return ResponseEntity.ok(universityService.createUniversity(university));
     }
 
-    // ✅ يسمح للأدمن والممثلين برؤية الجامعات مع دعم Pagination
+    // يسمح للأدمن والممثلين برؤية الجامعات مع دعم Pagination
     @PreAuthorize("hasAnyRole('ADMIN', 'UNIVERSITY_REPRESENTATIVE')")
     @GetMapping
     public ResponseEntity<Page<UniversityDto>> getAllUniversities(
@@ -38,11 +38,11 @@ public class UniversityController {
         return ResponseEntity.ok(universities);
     }
 
-    // ✅ يسمح فقط للأدمن بحذف جامعة
+    //  يسمح فقط للأدمن بحذف جامعة
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUniversity(@PathVariable Long id) {
         universityService.deleteUniversity(id);
-        return ResponseEntity.noContent().build();  // ✅ 204 No Content
+        return ResponseEntity.noContent().build();  //  204 No Content
     }
 }

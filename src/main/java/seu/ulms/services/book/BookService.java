@@ -48,7 +48,6 @@ public class BookService {
         book.setDescription(bookDetails.getDescription());
         book.setPublishDate(bookDetails.getPublishDate());
         book.setVersion(bookDetails.getVersion());
-
         return bookMapper.toDto(bookRepository.save(book));
     }
 }
