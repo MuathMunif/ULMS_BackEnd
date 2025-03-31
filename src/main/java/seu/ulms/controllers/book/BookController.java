@@ -1,8 +1,9 @@
 package seu.ulms.controllers.book;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +21,26 @@ public class BookController {
     //  يسمح فقط لممثل الجامعة بإضافة كتاب جديد
     @PreAuthorize("hasRole('UNIVERSITY_REPRESENTATIVE')")
     @PostMapping
-    public ResponseEntity<BookDto> createBook(@RequestBody @Valid BookDto book) {
-        return ResponseEntity.ok(bookService.createBook(book));
+    public ResponseEntity<BookDto> createOrUpdate(@RequestBody @Valid BookDto book) {
+        return ResponseEntity.ok(bookService.createOrUpdateBook(book));
     }
 
-    //  يسمح للأدمن والممثلين برؤية جميع الكتب
-    @PreAuthorize("hasAnyRole('ADMIN', 'UNIVERSITY_REPRESENTATIVE')")
+    //  جلب جميع الكتب مع دعم `Pagination`
     @GetMapping
-    public ResponseEntity<List<BookDto>> getAllBooks() {
-        return ResponseEntity.ok(bookService.getAllBooks());
+    public ResponseEntity<Page<BookDto>> getAllBooks(Pageable pageable) {
+        return ResponseEntity.ok(bookService.getAllBooks(pageable));
+    }
+
+    //  جلب جميع الكتب الخاصة بجامعة معينة
+    @GetMapping("/university/{universityId}")
+    public ResponseEntity<List<BookDto>> getBooksByUniversity(@PathVariable Long universityId) {
+        return ResponseEntity.ok(bookService.getBooksByUniversity(universityId));
+    }
+
+    //  البحث عن كتاب عبر العنوان
+    @GetMapping("/search")
+    public ResponseEntity<List<BookDto>> searchBooksByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(bookService.searchBooksByTitle(title));
     }
 
     //  استرجاع كتاب عبر الـ ID

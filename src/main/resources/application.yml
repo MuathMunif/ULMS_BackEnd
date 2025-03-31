@@ -47,3 +47,9 @@ keycloak:
   client-secret: pqlup7oMaQH1OYpeFWUKXbHcDWS0zbPe
   scope: open-id
   grant-type: client_credentials
+
+minio:
+  url: http://localhost:9000
+  access-key: admin
+  secret-key: admin123
+  bucket: ulms-files

@@ -25,14 +25,16 @@ public class AttachmentEntity extends BasesAudit implements Serializable {
             name = "attach_sq",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
     @Column(name = "file_name", nullable = false)
     private String fileName;
-    @Column(name = "file_path", nullable = false)
+
+    @Column(name = "file_path")
     private String filePath;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "file_type")
     private EFileType fileType;
-    @Column(name = "file_size")
-    private String fileSize;
+    @Column(name = "file_size", nullable = false)
+    private Long fileSize;
 }
