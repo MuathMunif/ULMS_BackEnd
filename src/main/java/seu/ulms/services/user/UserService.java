@@ -45,4 +45,11 @@ public class UserService {
     public UserDto getUserByUsername(String username) {
         return userMapper.toDto(userRepository.findByUsername(username).orElseThrow(RuntimeException::new));
     }
+
+    // entity وليس dto لربطه مع الاشعارات
+    // تجربه للميثود فقط
+    public UserEntity getUserEntityById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }

@@ -1,0 +1,86 @@
+databaseChangeLog:
+- changeSet:
+    id: 1744185254120-1
+    author: muath (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: notificationsPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            defaultValueBoolean: false
+            name: deleted
+            type: BOOLEAN
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: message
+            type: TEXT
+        - column:
+            name: is_read
+            type: BOOLEAN
+        - column:
+            name: title
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: type
+            type: VARCHAR(255)
+        - column:
+            name: book_id
+            type: BIGINT
+        - column:
+            name: user_id
+            type: BIGINT
+        tableName: notifications
+- changeSet:
+    id: 1744185254120-2
+    author: muath (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: book_id
+        baseTableName: notifications
+        constraintName: FK32nyxqjmsamrmqnlp8py8g23g
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: book
+        validate: true
+- changeSet:
+    id: 1744185254120-3
+    author: muath (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: notifications
+        constraintName: FK9y21adhxn0ayjhfocscqox7bh
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+- changeSet:
+    id: 1744185254120-4
+    author: muath (generated)
+    changes:
+    - dropColumn:
+        columnName: data
+        tableName: attachment
+
