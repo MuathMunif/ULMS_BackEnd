@@ -24,7 +24,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/public/**" // ✅ السماح بالوصول لـ API غير المحمية
+                                "/public/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**" //  السماح بالوصول لـ API غير المحمية
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -53,3 +53,10 @@ minio:
   access-key: admin
   secret-key: admin123
   bucket: ulms-files
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html

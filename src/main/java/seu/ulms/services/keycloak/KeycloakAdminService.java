@@ -37,8 +37,8 @@ public class KeycloakAdminService {
         try {
             RealmResource realmResource = keycloak.realm(REALM);
             realmResource.users().create(user);
-
             return ResponseEntity.status(201).body("User created successfully!");
+
         } catch (Exception e) {
             return ResponseEntity.status(400).body("Failed to create user: " + e.getMessage());
         }
