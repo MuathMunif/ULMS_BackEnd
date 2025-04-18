@@ -11,6 +11,8 @@ import seu.ulms.dto.university.UniversityCreationDto;
 import seu.ulms.dto.university.UniversityDto;
 import seu.ulms.services.university.UniversityService;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -38,11 +40,14 @@ public class UniversityController {
         return ResponseEntity.ok(universities);
     }
 
-    //  يسمح فقط للأدمن بحذف جامعة
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUniversity(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteUniversity(@PathVariable Long id) {
         universityService.deleteUniversity(id);
-        return ResponseEntity.noContent().build();  //  204 No Content
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "University deleted successfully.");
+
+        return ResponseEntity.ok(response);  // 200 OK with message
     }
 }

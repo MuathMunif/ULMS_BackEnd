@@ -18,20 +18,14 @@ import java.io.Serializable;
 @Getter
 public class CategoryEntity extends BasesAudit implements Serializable {
     @Id
-    @GeneratedValue(
-       strategy =  GenerationType.SEQUENCE
-    )
-    @SequenceGenerator(
-            name = "category_id",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name ="title",nullable = false)
     private String title;
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY) //cascade = CascadeType.ALL)
     @JoinColumn(name = "university_id")
     private UniversityEntity university;
 

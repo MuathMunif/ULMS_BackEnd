@@ -27,6 +27,7 @@ public class BookController {
 
     //  جلب جميع الكتب مع دعم `Pagination`
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<BookDto>> getAllBooks(Pageable pageable) {
         return ResponseEntity.ok(bookService.getAllBooks(pageable));
     }

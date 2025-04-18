@@ -39,10 +39,10 @@ spring:
         jwt:
           jwk-set-uri: http://localhost:8080/realms/dev/protocol/openid-connect/certs
 
-# ✅ إضافة إعدادات Keycloak Admin Client
+#  إضافة إعدادات Keycloak Admin Client
 keycloak:
   auth-server-url: http://localhost:8080
-  realm: dev  # تأكد أنه نفس الاسم في Keycloak
+  realm: dev
   client-id: umls-admin
   client-secret: pqlup7oMaQH1OYpeFWUKXbHcDWS0zbPe
   scope: open-id

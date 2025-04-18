@@ -43,7 +43,10 @@ public class UserService {
     }
 
     public UserDto getUserByUsername(String username) {
-        return userMapper.toDto(userRepository.findByUsername(username).orElseThrow(RuntimeException::new));
+        return userMapper.toDto(
+                userRepository.findByUsername(username)
+                        .orElseThrow(() -> new RuntimeException("User not found with username: " + username))
+        );
     }
 
     // entity وليس dto لربطه مع الاشعارات
