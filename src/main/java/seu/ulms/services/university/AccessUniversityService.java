@@ -84,4 +84,30 @@ public class AccessUniversityService {
         accessUniversityRepository.save(accessUniversityEntity);
         return accessUniversityDto;
     }
+
+    // تجربه ميثود لحذف ممثل
+    @Transactional
+    public void deleteRepresentative(Long accessId) {
+        // 1. جلب العلاقة
+        AccessUniversityEntity accessUniversityEntity = accessUniversityRepository.findById(accessId)
+                .orElseThrow(() -> new RuntimeException("Representative link not found"));
+
+        // 2. التحقق من أنه ممثل
+        if (accessUniversityEntity.getRelationType() != ERelationType.REPRESENTATIVE) {
+            throw new RuntimeException("This user is not a representative");
+        }
+
+        // 3. استخراج بيانات المستخدم
+        UserEntity user = accessUniversityEntity.getUser();
+        String username = user.getUsername();
+
+        // 4. حذف العلاقة access_university
+        accessUniversityRepository.deleteById(accessId);
+
+        // 5. حذف المستخدم من قاعدة البيانات
+        userService.deleteUser(user.getId());
+
+        // 6. حذف المستخدم من Keycloak
+        keycloakAdminService.deleteUser(username);
+    }
 }

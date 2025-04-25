@@ -1,6 +1,7 @@
 package seu.ulms.controllers.university;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import seu.ulms.dto.university.AccessUniversityDto;
@@ -36,5 +37,13 @@ public class AccessUniversityController {
     @PreAuthorize("hasAnyRole('ADMIN', 'UNIVERSITY_REPRESENTATIVE')")
     public AccessUniversityDto updateStatus(@RequestBody AccessUniversityDto accessUniversityDto){
         return accessUniversityService.updateStatus(accessUniversityDto);
+    }
+
+    // داله لحذف ممثل الجامعه
+    @DeleteMapping("/delete/representative/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deleteRepresentative(@PathVariable Long id) {
+        accessUniversityService.deleteRepresentative(id);
+        return ResponseEntity.ok("Representative deleted successfully.");
     }
 }
