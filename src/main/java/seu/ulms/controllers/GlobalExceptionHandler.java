@@ -65,23 +65,27 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Map<String, String>> handleDuplicateKeyException(DataIntegrityViolationException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", "Bad Request");
-
-        String message = ex.getMostSpecificCause().getMessage(); // تاخذ الرسالة الحقيقية من قاعدة البيانات
-
-        if (message.contains("university") && message.contains("domain")) {
-            response.put("message", "University with the same domain already exists.");
-        } else if (message.contains("users") && message.contains("email")) {
-            response.put("message", "User with the same email already exists.");
-        } else if (message.contains("users") && message.contains("user_name")) {
-            response.put("message", "Username is already taken.");
-        } else {
-            response.put("message", "Duplicate key value violates a unique constraint.");
-        }
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    public ResponseEntity<Map<String, String>> handleDuplicateKeyException(DataIntegrityViolationException ex) {
+//        Map<String, String> response = new HashMap<>();
+//        response.put("error", "Bad Request");
+//
+//        String message = ex.getMostSpecificCause().getMessage(); // تاخذ الرسالة الحقيقية من قاعدة البيانات
+//
+//        if (message.contains("university") && message.contains("domain")) {
+//            response.put("message", "University with the same domain already exists.");
+//        } else if (message.contains("users") && message.contains("email")) {
+//            response.put("message", "User with the same email already exists.");
+//        } else if (message.contains("users") && message.contains("user_name")) {
+//            response.put("message", "Username is already taken.");
+//
+//        } else if (message.contains("Id") && message.contains("id")) {
+//            response.put("message", "Id is already taken.");
+//
+//        } else {
+//            response.put("message", "Duplicate key value violates a unique constraint.");
+//        }
+//
+//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//    }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 public interface BookMapper {
 
     @Mapping(source = "university.name", target = "universityName") // تحويل اسم الجامعة
+    @Mapping(source = "university.id", target = "universityId")
     @Mapping(source = "category.title", target = "categoryName") //  تحويل اسم التصنيف
     BookDto toDto(BookEntity bookEntity);
 

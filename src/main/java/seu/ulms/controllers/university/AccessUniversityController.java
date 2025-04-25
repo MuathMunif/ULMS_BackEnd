@@ -25,7 +25,7 @@ public class AccessUniversityController {
 //    Create api to allow student request to register with  University so that the Representative approve or reject this request
 
     @PostMapping("/student/{universityId}")
-    @PreAuthorize("hasAnyRole('STUDNET')")
+    @PreAuthorize("hasAnyRole('STUDNET','ROLE_STUDNET','STUDENT','ROLE_STUDENT')")
     public AccessUniversityDto requestAccessUniversity(@PathVariable("universityId") Long universityId){
         return accessUniversityService.requestAccessUniversity(universityId);
     }

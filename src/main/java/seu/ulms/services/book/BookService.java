@@ -104,14 +104,14 @@ public class BookService {
         book.setPublishDate(bookDetails.getPublishDate());
         book.setVersion(bookDetails.getVersion());
 
-        // تحديث الجامعة إذا تم تمرير ID جديد
-        if (bookDetails.getUniversityId() != null) {
-            UniversityEntity university = universityRepository.findById(bookDetails.getUniversityId())
-                    .orElseThrow(() -> new RuntimeException("University not found"));
-            book.setUniversity(university);
-        }
-
-        // تحديث التصنيف إذا تم تمرير اسم
+//        // تحديث الجامعة إذا تم تمرير ID جديد
+//        if (bookDetails.getUniversityId() != null) {
+//            UniversityEntity university = universityRepository.findById(bookDetails.getUniversityId())
+//                    .orElseThrow(() -> new RuntimeException("University not found"));
+//            book.setUniversity(university);
+//        }
+//
+//        // تحديث التصنيف إذا تم تمرير اسم
         if (bookDetails.getCategoryName() != null) {
             CategoryEntity category = categoryRepository.findAll().stream()
                     .filter(c -> c.getTitle().equalsIgnoreCase(bookDetails.getCategoryName()))
@@ -119,13 +119,13 @@ public class BookService {
                     .orElseThrow(() -> new RuntimeException("Category not found"));
             book.setCategory(category);
         }
-
-        // تحديث المرفق إذا تم تمرير ID
-        if (bookDetails.getAttachmentId() != null) {
-            AttachmentEntity attachment = attachmentRepository.findById(bookDetails.getAttachmentId())
-                    .orElseThrow(() -> new RuntimeException("Attachment not found"));
-            book.setAttachment(attachment);
-        }
+//
+//        // تحديث المرفق إذا تم تمرير ID
+//        if (bookDetails.getAttachmentId() != null) {
+//            AttachmentEntity attachment = attachmentRepository.findById(bookDetails.getAttachmentId())
+//                    .orElseThrow(() -> new RuntimeException("Attachment not found"));
+//            book.setAttachment(attachment);
+//        }
 
         return bookMapper.toDto(bookRepository.save(book));
     }

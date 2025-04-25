@@ -1,5 +1,6 @@
 package seu.ulms.services.university;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,24 @@ public class UniversityService {
 
     //  حذف جامعة عبر الـ ID
     public void deleteUniversity(Long id) {
+        if (!universityRepository.existsById(id)) {
+            throw new RuntimeException("University not found with ID: " + id);
+        }
         universityRepository.deleteById(id);
+    }
+    // تحديث بيانات الجامعه
+    @Transactional
+    public UniversityDto updateUniversity(Long id, UniversityCreationDto dto) {
+        UniversityEntity entity = universityRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("University not found with ID: " + id));
+
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        entity.setDomain(dto.getDomain());
+        entity.setLocation(dto.getLocation());
+        entity.setLibraryName(dto.getLibraryName());
+
+        return universityMapper.toDto(universityRepository.save(entity));
     }
 }
 

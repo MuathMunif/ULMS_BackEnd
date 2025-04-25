@@ -50,4 +50,11 @@ public class UniversityController {
 
         return ResponseEntity.ok(response);  // 200 OK with message
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("edit/{id}")
+    public ResponseEntity<UniversityDto> updateUniversity(@PathVariable Long id, @RequestBody @Valid UniversityCreationDto dto) {
+        return ResponseEntity.ok(universityService.updateUniversity(id, dto));
+    }
+
 }

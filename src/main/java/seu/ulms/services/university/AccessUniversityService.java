@@ -54,8 +54,7 @@ public class AccessUniversityService {
     }
 
     public AccessUniversityDto requestAccessUniversity(Long universityId) {
-        UserEntity user = userMapper.toEntity(
-                userService.getUserByUsername(SecurityUtil.getCurrentUserName()));
+        UserEntity user = userService.syncUserWithKeycloak(SecurityUtil.getCurrentUserName());
         UniversityEntity universityEntity = universityRepository.findById(universityId).orElseThrow(() -> new RuntimeException("not found"));
         AccessUniversityEntity accessUniversityEntity =
                 accessUniversityRepository.findByUserAndUniversity(user, universityEntity).orElse(new AccessUniversityEntity());

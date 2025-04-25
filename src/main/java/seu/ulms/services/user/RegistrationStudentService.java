@@ -24,12 +24,15 @@ public class RegistrationStudentService {
 
     @Transactional
     public RegistrationStudentDto registerStudent(RegistrationStudentDto studentDto) {
-        UserEntity user =userRepository.findByEmail(studentDto.getEmail()).orElse(new UserEntity());
-        if (user.getUsername().equals(studentDto.getUsername())
-                || user.getEmail().equals(studentDto.getEmail())) {
-            throw new RuntimeException("User already registered in the system!");
+        if (userRepository.findByUsername(studentDto.getUsername()).isPresent()) {
+            throw new RuntimeException("Username is already taken!");
         }
-        user = userMapper.toEntity(studentDto);
+
+        if (userRepository.findByEmail(studentDto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email is already registered!");
+        }
+
+        UserEntity user = userMapper.toEntity(studentDto);
         user.setUserRole(EUserRole.STUDENT);
         userRepository.save(user);
 
@@ -37,6 +40,7 @@ public class RegistrationStudentService {
         keycloakAdminService.createUser(userDto);
         keycloakAdminService.assignRoleToUser(userDto.getUsername(), EKeycloakRole.ROLE_STUDENT.toString());
         keycloakAdminService.triggerResetPasswordEmail(userDto.getUsername());
+
         return studentDto;
     }
 }

@@ -19,7 +19,7 @@ public class BookController {
     private final BookService bookService;
 
     //  يسمح فقط لممثل الجامعة بإضافة كتاب جديد
-    @PreAuthorize("hasRole('UNIVERSITY_REPRESENTATIVE')")
+    @PreAuthorize("hasAnyRole('UNIVERSITY_REPRESENTATIVE','ADMIN')")
     @PostMapping
     public ResponseEntity<BookDto> createOrUpdate(@RequestBody @Valid BookDto book) {
         return ResponseEntity.ok(bookService.createOrUpdateBook(book));
@@ -33,6 +33,7 @@ public class BookController {
     }
 
     //  جلب جميع الكتب الخاصة بجامعة معينة
+    @PreAuthorize("hasAnyRole('UNIVERSITY_REPRESENTATIVE','ADMIN','STUDENT','ROLE_STUDENT')")
     @GetMapping("/university/{universityId}")
     public ResponseEntity<List<BookDto>> getBooksByUniversity(@PathVariable Long universityId) {
         return ResponseEntity.ok(bookService.getBooksByUniversity(universityId));
@@ -51,16 +52,16 @@ public class BookController {
     }
 
     //  يسمح فقط لممثل الجامعة بحذف الكتاب
-    @PreAuthorize("hasRole('UNIVERSITY_REPRESENTATIVE')")
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('UNIVERSITY_REPRESENTATIVE','ADMIN')")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
     }
 
     //  يسمح فقط لممثل الجامعة بتحديث الكتاب
-    @PreAuthorize("hasRole('UNIVERSITY_REPRESENTATIVE')")
-    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('UNIVERSITY_REPRESENTATIVE','ADMIN')")
+    @PutMapping("edit/{id}")
     public ResponseEntity<BookDto> updateBook(@PathVariable Long id, @RequestBody @Valid BookDto bookDetails) {
         return ResponseEntity.ok(bookService.updateBook(id, bookDetails));
     }

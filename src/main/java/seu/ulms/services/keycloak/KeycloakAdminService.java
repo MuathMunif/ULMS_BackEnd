@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import seu.ulms.dto.user.UserDto;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -28,19 +27,31 @@ public class KeycloakAdminService {
 
     //  إنشاء مستخدم جديد باستخدام UserDTO
     public ResponseEntity<String> createUser(UserDto userDTO) {
-        UserRepresentation user = new UserRepresentation();
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
-        user.setEnabled(true);
-        user.setEmailVerified(false);
-
         try {
             RealmResource realmResource = keycloak.realm(REALM);
-            realmResource.users().create(user);
+
+            //  نبحث في Keycloak باستخدام email ككلمة مفتاحية
+            List<UserRepresentation> existingUsers = realmResource.users().search(userDTO.getEmail(), true);
+
+            //  نتأكد إن فيه مستخدم عنده نفس الإيميل بالضبط
+            for (UserRepresentation user : existingUsers) {
+                if (user.getEmail() != null && user.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
+                    return ResponseEntity.badRequest().body("The user with this email already exists.");
+                }
+            }
+
+            //  إنشاء المستخدم الجديد
+            UserRepresentation newUser = new UserRepresentation();
+            newUser.setUsername(userDTO.getUsername());
+            newUser.setEmail(userDTO.getEmail());
+            newUser.setEnabled(true);
+            newUser.setEmailVerified(false);
+
+            realmResource.users().create(newUser);
             return ResponseEntity.status(201).body("User created successfully!");
 
         } catch (Exception e) {
-            return ResponseEntity.status(400).body("Failed to create user: " + e.getMessage());
+            return ResponseEntity.status(500).body("Failed to create user: " + e.getMessage());
         }
     }
 
@@ -134,5 +145,37 @@ public class KeycloakAdminService {
         passwordCred.setType(CredentialRepresentation.PASSWORD);
         passwordCred.setValue(password);
         return passwordCred;
+    }
+
+// to save user data from keycloak to User DTO
+    public UserDto getUserByUsername(String username) {
+        List<UserRepresentation> users = keycloak.realm(REALM).users().search(username);
+
+        if (users.isEmpty()) {
+            return null;
+        }
+
+        UserRepresentation user = users.get(0);
+        UserDto userDto = new UserDto();
+        userDto.setUsername(user.getUsername());
+        userDto.setEmail(user.getEmail());
+        userDto.setFullName((user.getFirstName() != null ? user.getFirstName() : "")
+                + " " +
+                (user.getLastName() != null ? user.getLastName() : ""));
+
+        return userDto;
+    }
+
+
+    // test keycloak admin client
+    public boolean isConnected() {
+        try {
+            List<UserRepresentation> users = keycloak.realm(REALM).users().list();
+            System.out.println("✅ Total users in Keycloak: " + users.size());
+            return true;
+        } catch (Exception e) {
+            System.out.println(" Failed to connect to Keycloak: " + e.getMessage());
+            return false;
+        }
     }
 }

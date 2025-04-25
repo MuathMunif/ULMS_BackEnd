@@ -47,7 +47,9 @@ keycloak:
   client-secret: pqlup7oMaQH1OYpeFWUKXbHcDWS0zbPe
   scope: open-id
   grant-type: client_credentials
-
+  admin:
+    username: admin
+    password: admin
 minio:
   url: http://localhost:9000
   access-key: admin
