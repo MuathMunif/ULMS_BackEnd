@@ -3,6 +3,7 @@ package seu.ulms.repositoies.universty;
 import org.springframework.data.jpa.repository.JpaRepository;
 import seu.ulms.entities.universty.AccessUniversityEntity;
 import seu.ulms.entities.universty.ERelationType;
+import seu.ulms.entities.universty.EStatus;
 import seu.ulms.entities.universty.UniversityEntity;
 import seu.ulms.entities.user.UserEntity;
 
@@ -13,4 +14,6 @@ public interface AccessUniversityRepository extends JpaRepository<AccessUniversi
 
     Optional<AccessUniversityEntity> findByUserAndUniversity(UserEntity user, UniversityEntity university);
     List<AccessUniversityEntity> findByRelationType(ERelationType relationType);
+    List<AccessUniversityEntity> findByUniversityAndStatus(UniversityEntity university, EStatus status);
+    Optional<AccessUniversityEntity> findByUser(UserEntity user);
 }

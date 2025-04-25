@@ -69,45 +69,53 @@ public class AccessUniversityService {
         return accessUniversityDto;
 
     }
-
+    @Transactional
     public AccessUniversityDto updateStatus(AccessUniversityDto accessUniversityDto) {
         AccessUniversityEntity accessUniversityEntity = accessUniversityRepository
-                .findById(accessUniversityDto.getId()).orElseThrow(() -> new RuntimeException("not found"));
+                .findById(accessUniversityDto.getId())
+                .orElseThrow(() -> new RuntimeException("Request not found!"));
+        //  استرجع اسم المستخدم الحالي من Keycloak
+        String currentUsername = SecurityUtil.getCurrentUserName();
+        //  دور عليه بقاعدة البيانات عندك
+        UserEntity currentUser = userService.getUserEntityByUsername(currentUsername);
 
-        UserEntity user = userMapper.toEntity(userService.getUserByUsername(SecurityUtil.getCurrentUserName()));
-        if (user.getUserRole() == EUserRole.REPRESENTATIVE) {
-            // this method to check if a REPRESENTATIVE already has access in this University
-            accessUniversityRepository.findByUserAndUniversity(user,
-                    accessUniversityEntity.getUniversity()).orElseThrow(() -> new RuntimeException("not found"));
+        if (currentUser.getUserRole() == EUserRole.REPRESENTATIVE) {
+            //  تأكد أن الممثل فعلا يتبع نفس الجامعة
+            boolean isRepresentativeOfUniversity = accessUniversityRepository
+                    .findByUserAndUniversity(currentUser, accessUniversityEntity.getUniversity())
+                    .isPresent();
+
+            if (!isRepresentativeOfUniversity) {
+                throw new RuntimeException("Access Denied: You are not representative of this university!");
+            }
         }
+        //  عدل الحالة
         accessUniversityEntity.setStatus(accessUniversityDto.getStatus());
         accessUniversityRepository.save(accessUniversityEntity);
         return accessUniversityDto;
     }
 
-    // تجربه ميثود لحذف ممثل
+
+    //  ميثود لحذف ممثل
     @Transactional
     public void deleteRepresentative(Long accessId) {
-        // 1. جلب العلاقة
+        //  جلب العلاقة
         AccessUniversityEntity accessUniversityEntity = accessUniversityRepository.findById(accessId)
                 .orElseThrow(() -> new RuntimeException("Representative link not found"));
-
-        // 2. التحقق من أنه ممثل
+        //  التحقق من أنه ممثل
         if (accessUniversityEntity.getRelationType() != ERelationType.REPRESENTATIVE) {
             throw new RuntimeException("This user is not a representative");
         }
-
-        // 3. استخراج بيانات المستخدم
+        //  استخراج بيانات المستخدم
         UserEntity user = accessUniversityEntity.getUser();
         String username = user.getUsername();
-
-        // 4. حذف العلاقة access_university
+        //  حذف العلاقة access_university
         accessUniversityRepository.deleteById(accessId);
-
-        // 5. حذف المستخدم من قاعدة البيانات
+        //  حذف المستخدم من قاعدة البيانات
         userService.deleteUser(user.getId());
-
-        // 6. حذف المستخدم من Keycloak
+        //  حذف المستخدم من Keycloak
         keycloakAdminService.deleteUser(username);
     }
+
+
 }

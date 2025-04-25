@@ -58,10 +58,13 @@ public class GlobalExceptionHandler {
     // 🔸 400 - General Runtime Exception
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
-        log.error("Unexpected error occurred: {}", ex.getMessage(), ex); // ✅ Log the full stack trace
+        log.error("❗ RuntimeException Message: {}", ex.getMessage(), ex);
+
         Map<String, String> response = new HashMap<>();
         response.put("error", "Bad Request");
-        response.put("message", ex.getMessage());
+
+        response.put("message", ex.getMessage() != null ? ex.getMessage() : "An unexpected error occurred.");
+
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -88,4 +91,5 @@ public class GlobalExceptionHandler {
 //
 //        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 //    }
+
 }

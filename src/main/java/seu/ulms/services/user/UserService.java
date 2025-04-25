@@ -78,4 +78,9 @@ public class UserService {
         userEntity.setUserRole(EUserRole.STUDENT);
         return userRepository.save(userEntity); //  حفظه يخليه Managed
     }
+     // اضفت الداله هذي دايركت على user entity لكي استخدمها لجلب معلومات ممثل جامعه "اثناء تحديث حاله الطلبات"
+     public UserEntity getUserEntityByUsername(String username) {
+         return userRepository.findByUsername(username)
+                 .orElseThrow(() -> new RuntimeException("User not found with username test: " + username));
+     }
 }

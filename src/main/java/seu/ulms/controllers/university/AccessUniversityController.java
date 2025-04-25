@@ -34,7 +34,7 @@ public class AccessUniversityController {
 // Create API to allow Representative approve or reject the request
 
     @PostMapping("/update_status")
-    @PreAuthorize("hasAnyRole('ADMIN', 'UNIVERSITY_REPRESENTATIVE')")
+    @PreAuthorize("isAuthenticated()")
     public AccessUniversityDto updateStatus(@RequestBody AccessUniversityDto accessUniversityDto){
         return accessUniversityService.updateStatus(accessUniversityDto);
     }
