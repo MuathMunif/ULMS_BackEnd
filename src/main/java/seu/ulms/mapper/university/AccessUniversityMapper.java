@@ -1,4 +1,4 @@
-package seu.ulms.mapper;
+package seu.ulms.mapper.university;
 
 
 

@@ -28,11 +28,11 @@ public class AccessUniversityEntity extends BasesAudit implements Serializable {
     )
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "university_id")
+    @ManyToOne
+    @JoinColumn(name = "university_id",unique = false,nullable = false)
     private UniversityEntity university;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 

@@ -37,14 +37,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
-    // 🔸 403 - Forbidden (no permission)
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", "Forbidden");
-        response.put("message", "You don't have permission to perform this action.");
-        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-    }
+//    // 🔸 403 - Forbidden (no permission)
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
+//        Map<String, String> response = new HashMap<>();
+//        response.put("error", "Forbidden");
+//        response.put("message", "You don't have permission to perform this action.");
+//        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+//    }
 
     // 🔸 404 - Entity Not Found
     @ExceptionHandler(EntityNotFoundException.class)

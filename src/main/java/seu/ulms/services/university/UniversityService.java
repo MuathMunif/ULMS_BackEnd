@@ -9,7 +9,7 @@ import seu.ulms.dto.university.UniversityCreationDto;
 import seu.ulms.dto.university.UniversityDto;
 import seu.ulms.entities.universty.UniversityEntity;
 import seu.ulms.repositoies.universty.UniversityRepository;
-import seu.ulms.mapper.UniversityMapper;
+import seu.ulms.mapper.university.UniversityMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -46,8 +46,6 @@ public class UniversityEntity extends BasesAudit implements Serializable {
     @OneToMany(mappedBy = "university")
     private List<BookEntity> bookList;
 
-
-    // اضافه من عندي
-    @OneToOne(mappedBy = "university")
-    private AccessUniversityEntity accessUniversity;
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AccessUniversityEntity> accessUniversity;
 }
