@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seu.ulms.dto.university.AccessUniversityDto;
 import seu.ulms.dto.university.AccessUniversityPostDto;
+import seu.ulms.dto.university.UniversityAccessRequestDto;
 import seu.ulms.dto.user.UserDto;
 import seu.ulms.entities.universty.AccessUniversityEntity;
 import seu.ulms.entities.universty.ERelationType;
@@ -13,6 +14,7 @@ import seu.ulms.entities.universty.UniversityEntity;
 import seu.ulms.entities.user.EUserRole;
 import seu.ulms.entities.user.UserEntity;
 
+import seu.ulms.mapper.university.AccessUniversityMapper;
 import seu.ulms.mapper.user.UserMapper;
 import seu.ulms.repositoies.universty.AccessUniversityRepository;
 import seu.ulms.repositoies.universty.UniversityRepository;
@@ -20,6 +22,9 @@ import seu.ulms.services.keycloak.EKeycloakRole;
 import seu.ulms.services.keycloak.KeycloakAdminService;
 import seu.ulms.services.user.UserService;
 import seu.ulms.util.SecurityUtil;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +34,7 @@ public class AccessUniversityService {
     private final AccessUniversityRepository accessUniversityRepository;
     private final UserMapper userMapper;
     private final UserService userService;
+    private final AccessUniversityMapper accessUniversityMapper;
 
     @Transactional
     public AccessUniversityPostDto createRepresentative(AccessUniversityPostDto accessUniversityPostDto) {
@@ -117,5 +123,40 @@ public class AccessUniversityService {
         keycloakAdminService.deleteUser(username);
     }
 
+
+
+    public List<UniversityAccessRequestDto> getPendingRequestsForRepresentative() {
+        //  نجيب المستخدم الحالي
+        UserEntity user = userService.syncUserWithKeycloak(SecurityUtil.getCurrentUserName());
+
+        //  نتأكد إن المستخدم فعلاً ممثل
+        if (user.getUserRole() != EUserRole.REPRESENTATIVE) {
+            throw new RuntimeException("Access Denied: Only university representatives can access this resource.");
+        }
+
+        //  نجيب العلاقة بين المستخدم والجامعة
+        AccessUniversityEntity representativeAccess = accessUniversityRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("University Representative record not found."));
+
+        //  نتأكد أن العلاقة نوعها REPRESENTATIVE
+        if (representativeAccess.getRelationType() != ERelationType.REPRESENTATIVE) {
+            throw new RuntimeException("Access Denied: You are not assigned as a representative to any university.");
+        }
+
+        //  نجيب الطلبات pending في نفس الجامعة
+        List<AccessUniversityEntity> pendingRequests = accessUniversityRepository.findByUniversityAndStatus(
+                representativeAccess.getUniversity(), EStatus.PENDING
+        );
+
+        //  إذا ما فيه طلبات
+        if (pendingRequests.isEmpty()) {
+            throw new RuntimeException("No pending student access requests found for your university.");
+        }
+
+        //  نحول الطلبات إلى DTO ونرجعها
+        return pendingRequests.stream()
+                .map(accessUniversityMapper::toRequestDto)
+                .collect(Collectors.toList());
+    }
 
 }

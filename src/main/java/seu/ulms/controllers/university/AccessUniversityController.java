@@ -6,8 +6,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import seu.ulms.dto.university.AccessUniversityDto;
 import seu.ulms.dto.university.AccessUniversityPostDto;
+import seu.ulms.dto.university.UniversityAccessRequestDto;
 import seu.ulms.entities.universty.AccessUniversityEntity;
 import seu.ulms.services.university.AccessUniversityService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,11 +42,18 @@ public class AccessUniversityController {
         return accessUniversityService.updateStatus(accessUniversityDto);
     }
 
-    // داله لحذف ممثل الجامعه
+    //  لحذف ممثل الجامعه
     @DeleteMapping("/delete/representative/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteRepresentative(@PathVariable Long id) {
         accessUniversityService.deleteRepresentative(id);
         return ResponseEntity.ok("Representative deleted successfully.");
+    }
+
+    //  لعرض الطلبات
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/pending-requests")
+    public ResponseEntity<List<UniversityAccessRequestDto>> getPendingRequests() {
+        return ResponseEntity.ok(accessUniversityService.getPendingRequestsForRepresentative());
     }
 }
