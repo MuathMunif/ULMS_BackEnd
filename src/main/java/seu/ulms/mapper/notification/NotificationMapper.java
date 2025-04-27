@@ -12,7 +12,7 @@ import java.util.List;
 public interface NotificationMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "read", constant = "false") // لأن في الكيان اسم الحقل read
+    @Mapping(target = "read", constant = "false")
     NotificationEntity toEntity(NotificationCreateDto dto);
 
     @Mapping(source = "read", target = "isRead") // ربط read مع isRead

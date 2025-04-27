@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    @Mapping(source = "university.name", target = "universityName") // تحويل اسم الجامعة
+    @Mapping(source = "university.name", target = "universityName")
     @Mapping(source = "university.id", target = "universityId")
-    @Mapping(source = "category.title", target = "categoryName") //  تحويل اسم التصنيف
+    @Mapping(source = "category.title", target = "categoryName")
     BookDto toDto(BookEntity bookEntity);
 
     List<BookDto> toDtoList(List<BookEntity> bookEntities);

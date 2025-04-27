@@ -11,11 +11,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
-    // من الكيان إلى DTO
     @Mapping(source = "university.id", target = "universityId")
     CategoryDto toDto(CategoryEntity categoryEntity);
 
-    // من DTO إلى الكيان
+
     @Mapping(source = "universityId", target = "university.id")
     CategoryEntity toEntity(CategoryDto categoryDto);
 

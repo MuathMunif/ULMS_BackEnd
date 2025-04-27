@@ -25,6 +25,4 @@ public class RepresentativeService {
                 .map(representativeInfoMapper::toDto)
                 .collect(Collectors.toList());
     }
-
-
 }

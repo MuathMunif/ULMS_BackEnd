@@ -74,7 +74,6 @@ public class CategoryService {
 
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
-
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 }

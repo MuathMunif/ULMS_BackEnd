@@ -13,5 +13,5 @@ public class NotificationCreateDto {
     private String title;
     private String message;
     private ENotificationType type;
-    private Long bookId; // اختياري
+    private Long bookId;
 }

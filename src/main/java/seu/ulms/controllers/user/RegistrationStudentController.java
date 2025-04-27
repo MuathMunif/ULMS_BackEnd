@@ -30,21 +30,16 @@ public class RegistrationStudentController {
         return ResponseEntity.ok(keycloak.realm(realm).users().list());
     }
     //  Endpoint عام لتسجيل الطلاب
-//    @PostMapping("/register")
-//    public ResponseEntity<String> registerStudent(@RequestBody @Valid RegistrationStudentDto studentDto) {
-//        return ResponseEntity.ok(registrationStudentService.registerStudent(studentDto).getUsername() + " registered successfully!");
-//    }
     @PostMapping("/register")
     public ResponseEntity<String> registerStudent(@RequestBody @Valid RegistrationStudentDto studentDto) {
         registrationStudentService.registerStudent(studentDto);
         return ResponseEntity.ok("Student registered successfully!");
     }
 
+
     @GetMapping("/test-connection")
     public ResponseEntity<String> testConnection() {
         boolean connected = keycloakAdminService.isConnected();
         return ResponseEntity.ok(connected ? "Keycloak is connected!" : "Failed to connect to Keycloak");
     }
-
-
 }

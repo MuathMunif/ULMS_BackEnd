@@ -12,7 +12,7 @@ import seu.ulms.entities.universty.EStatus;
 @Setter
 @Getter
 public class UniversityRepresentativeDto {
-    private Long id; // تمت إضافته ليتوافق مع AccessUniversityEntity
+    private Long id;
     private String fullName;
     private String email;
     private ERelationType relationType;

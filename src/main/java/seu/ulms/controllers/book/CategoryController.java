@@ -16,8 +16,8 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    // إنشاء تصنيف جديد (فقط للأدمن)
-    @PreAuthorize("hasRole('ADMIN')")
+    // إنشاء تصنيف جديد (فقط للأدمن وممثل الجامعه)
+    @PreAuthorize("hasAnyRole('UNIVERSITY_REPRESENTATIVE','ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
         return ResponseEntity.ok(categoryService.createCategory(categoryDto));
@@ -47,16 +47,16 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.searchCategoriesByTitle(title));
     }
 
-    // حذف تصنيف (فقط للأدمن)
-    @PreAuthorize("hasRole('ADMIN')")
+    // حذف تصنيف (فقط للأدمن و ممثل الجامعه)
+    @PreAuthorize("hasAnyRole('UNIVERSITY_REPRESENTATIVE','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 
-    // تحديث تصنيف (فقط للأدمن)
-    @PreAuthorize("hasRole('ADMIN')")
+    // تحديث تصنيف (فقط للأدمن و ممثل الجامعه)
+    @PreAuthorize("hasAnyRole('UNIVERSITY_REPRESENTATIVE','ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDetails) {
         return ResponseEntity.ok(categoryService.updateCategory(id, categoryDetails));

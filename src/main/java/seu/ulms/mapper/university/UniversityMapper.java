@@ -21,7 +21,7 @@ public interface UniversityMapper {
 
     List<UniversityDto> toDtoList(List<UniversityEntity> entities);
 
-    // ✅ هذا هو المفتاح، ميثود مخصص لتحويل القائمة إلى ممثل واحد
+    //  هذا هو المفتاح، ميثود مخصص لتحويل القائمة إلى ممثل واحد
     default UniversityRepresentativeDto mapToRepresentative(List<AccessUniversityEntity> accessList) {
         if (accessList == null) return null;
 

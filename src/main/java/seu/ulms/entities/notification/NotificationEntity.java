@@ -20,28 +20,17 @@ public class NotificationEntity extends seu.ulms.entities.BasesAudit implements 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //  المستخدم الذي استلم الإشعار
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
-
-    //  نوع الإشعار (كـ ENUM)
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private ENotificationType type;
-
-    //  العنوان
     private String title;
-
-    //  الرسالة
     @Column(columnDefinition = "TEXT")
     private String message;
-
-    //  هل تم قراءة الإشعار
     @Column(name = "is_read")
     private boolean read = false;
-
-    //  ربط اختياري بكتاب
     @ManyToOne
     @JoinColumn(name = "book_id")
     private BookEntity book;

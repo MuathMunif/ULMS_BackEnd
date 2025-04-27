@@ -18,15 +18,14 @@ import java.util.List;
 public class AccessUniversityController {
     private final AccessUniversityService accessUniversityService;
 
-//    Create to allow admin to create new
-//    Representative for certain University and create it in keyclok with rest password
+
 
     @PostMapping("/crerate_representative")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public AccessUniversityPostDto createRepresentative(@RequestBody AccessUniversityPostDto accessUniversityPostDto){
         return accessUniversityService.createRepresentative(accessUniversityPostDto);
     }
-//    Create api to allow student request to register with  University so that the Representative approve or reject this request
+
 
     @PostMapping("/student/{universityId}")
     @PreAuthorize("hasAnyRole('STUDNET','ROLE_STUDNET','STUDENT','ROLE_STUDENT')")
@@ -34,7 +33,7 @@ public class AccessUniversityController {
         return accessUniversityService.requestAccessUniversity(universityId);
     }
 
-// Create API to allow Representative approve or reject the request
+
 
     @PostMapping("/update_status")
     @PreAuthorize("isAuthenticated()")
