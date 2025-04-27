@@ -18,6 +18,7 @@ import seu.ulms.mapper.university.AccessUniversityMapper;
 import seu.ulms.mapper.user.UserMapper;
 import seu.ulms.repositoies.universty.AccessUniversityRepository;
 import seu.ulms.repositoies.universty.UniversityRepository;
+import seu.ulms.repositoies.user.UserRepository;
 import seu.ulms.services.keycloak.EKeycloakRole;
 import seu.ulms.services.keycloak.KeycloakAdminService;
 import seu.ulms.services.user.UserService;
@@ -35,27 +36,36 @@ public class AccessUniversityService {
     private final UserMapper userMapper;
     private final UserService userService;
     private final AccessUniversityMapper accessUniversityMapper;
+    private final UserRepository userRepository;
 
     @Transactional
     public AccessUniversityPostDto createRepresentative(AccessUniversityPostDto accessUniversityPostDto) {
         UniversityEntity universityEntity = universityRepository.findById(accessUniversityPostDto.getUniversityId())
-                .orElseThrow(() -> new RuntimeException(" not found"));
-        AccessUniversityEntity accessUniversityEntity = new AccessUniversityEntity();
-        accessUniversityEntity.setUniversity(universityEntity);
-        accessUniversityEntity.setStatus(EStatus.APPROVED);
-        accessUniversityEntity.setRelationType(ERelationType.REPRESENTATIVE);
+                .orElseThrow(() -> new RuntimeException("University not found"));
 
+        // إنشاء وحفظ المستخدم أولاً
         UserEntity user = new UserEntity();
         user.setUsername(accessUniversityPostDto.getUsername());
         user.setFullName(accessUniversityPostDto.getFullName());
         user.setEmail(accessUniversityPostDto.getEmail());
         user.setUserRole(EUserRole.REPRESENTATIVE);
+        user = userRepository.save(user);
+
+        // انشاء علاقة AccessUniversityEntity
+        AccessUniversityEntity accessUniversityEntity = new AccessUniversityEntity();
+        accessUniversityEntity.setUniversity(universityEntity);
+        accessUniversityEntity.setStatus(EStatus.APPROVED);
+        accessUniversityEntity.setRelationType(ERelationType.REPRESENTATIVE);
         accessUniversityEntity.setUser(user);
-        accessUniversityRepository.save(accessUniversityEntity);
+
+        accessUniversityRepository.save(accessUniversityEntity); // الآن OK
+
+        // ارسال اليوزر لـ Keycloak
         UserDto userDto = userMapper.toDto(user);
         keycloakAdminService.createUser(userDto);
         keycloakAdminService.assignRoleToUser(userDto.getUsername(), EKeycloakRole.ROLE_UNIVERSITY_REPRESENTATIVE.toString());
         keycloakAdminService.triggerResetPasswordEmail(userDto.getUsername());
+
         return accessUniversityPostDto;
     }
 

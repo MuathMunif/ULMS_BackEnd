@@ -32,7 +32,7 @@ public class AccessUniversityEntity extends BasesAudit implements Serializable {
     @JoinColumn(name = "university_id",unique = false,nullable = false)
     private UniversityEntity university;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 

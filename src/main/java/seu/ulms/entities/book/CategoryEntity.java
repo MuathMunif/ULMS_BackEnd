@@ -9,6 +9,7 @@ import seu.ulms.entities.BasesAudit;
 import seu.ulms.entities.universty.UniversityEntity;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -29,4 +30,6 @@ public class CategoryEntity extends BasesAudit implements Serializable {
     @JoinColumn(name = "university_id")
     private UniversityEntity university;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<BookEntity> books;
 }

@@ -40,12 +40,12 @@ public class UniversityEntity extends BasesAudit implements Serializable {
     @Column(name = "library_name", nullable = false)
     private String libraryName;
 
-    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "university", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CategoryEntity> categoryList;
 
     @OneToMany(mappedBy = "university")
     private List<BookEntity> bookList;
 
-    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "university", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AccessUniversityEntity> accessUniversity;
 }

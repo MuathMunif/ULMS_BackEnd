@@ -49,7 +49,7 @@ public class BookEntity extends BasesAudit implements Serializable {
     @JoinColumn(name = "universty_id")
     private UniversityEntity university;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 }

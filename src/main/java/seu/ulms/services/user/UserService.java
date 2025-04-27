@@ -1,5 +1,6 @@
 package seu.ulms.services.user;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import seu.ulms.dto.user.UserDto;
@@ -38,7 +39,15 @@ public class UserService {
     }
 
     // حذف مستخدم بواسطة ID
+    @Transactional
     public void deleteUser(Long id) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+
+        // نحذف المستخدم من Keycloak
+        keycloakAdminService.deleteUser(userEntity.getUsername());
+
+        // بعدين نحذفه من قاعدة البيانات
         userRepository.deleteById(id);
     }
 
