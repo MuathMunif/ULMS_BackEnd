@@ -21,4 +21,5 @@ public class BookDto {
     private String universityName;
     private String categoryName;
     private Long attachmentId;
+    private String fileUrl;
 }
