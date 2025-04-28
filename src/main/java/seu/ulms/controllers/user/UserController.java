@@ -38,4 +38,10 @@ public class UserController {
         Optional<UserDto> userDTO = userService.getUserById(id);
         return userDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    // لعرض بيانات اليوزر في البروفايل
+    @GetMapping("/profile")
+    public ResponseEntity<UserDto> getCurrentUser() {
+        return ResponseEntity.ok(userService.getCurrentUser());
+    }
 }

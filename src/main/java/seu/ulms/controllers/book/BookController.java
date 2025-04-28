@@ -4,12 +4,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import seu.ulms.dto.book.BookDto;
+import seu.ulms.services.book.AttachmentService;
 import seu.ulms.services.book.BookService;
 
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
+    private final AttachmentService attachmentService;
 
     //  يسمح فقط لممثل الجامعة بإضافة كتاب جديد
     @PreAuthorize("hasAnyRole('UNIVERSITY_REPRESENTATIVE','ADMIN')")
@@ -64,5 +70,47 @@ public class BookController {
     @PutMapping("edit/{id}")
     public ResponseEntity<BookDto> updateBook(@PathVariable Long id, @RequestBody @Valid BookDto bookDetails) {
         return ResponseEntity.ok(bookService.updateBook(id, bookDetails));
+    }
+
+
+    @PostMapping("/upload_with_data")
+    public ResponseEntity<BookDto> uploadBookWithFile(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("author") String author,
+            @RequestParam("publishDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDate,
+            @RequestParam("version") String version,
+            @RequestParam("universityId") Long universityId,
+            @RequestParam("categoryName") String categoryName,
+            @RequestPart("file") MultipartFile file) {
+
+        // 1. ارفع الملف
+        var attachment = attachmentService.uploadAttachment(file);
+
+        // 2. جهز الكتاب
+        BookDto bookDto = new BookDto();
+        bookDto.setTitle(title);
+        bookDto.setDescription(description);
+        bookDto.setAuthor(author);
+        bookDto.setPublishDate(publishDate);
+        bookDto.setVersion(version);
+        bookDto.setUniversityId(universityId);
+        bookDto.setCategoryName(categoryName);
+        bookDto.setAttachmentId(attachment.getId());
+
+        // 3. احفظ الكتاب
+        BookDto savedBook = bookService.createOrUpdateBook(bookDto);
+
+        return ResponseEntity.ok(savedBook);
+    }
+
+
+
+    // لعرض الكتب للطلاب المخول لهم
+    @PreAuthorize("hasRole('STUDENT')") // فقط الطلاب
+    @GetMapping("/student/{universityId}")
+    public ResponseEntity<List<BookDto>> viewApprovedUniversityBooks(@PathVariable Long universityId) {
+        List<BookDto> books = bookService.getBooksForStudentByUniversity(universityId);
+        return ResponseEntity.ok(books);
     }
 }

@@ -29,8 +29,8 @@ public class UniversityController {
         return ResponseEntity.ok(universityService.createUniversity(university));
     }
 
-    // يسمح للأدمن والممثلين برؤية الجامعات مع دعم Pagination
-    @PreAuthorize("hasAnyRole('ADMIN', 'UNIVERSITY_REPRESENTATIVE')")
+    // يسمح للجميع برؤية الجامعات مع دعم Pagination
+    @PreAuthorize("hasAnyRole('ADMIN', 'UNIVERSITY_REPRESENTATIVE', 'STUDENT')")
     @GetMapping
     public ResponseEntity<Page<UniversityDto>> getAllUniversities(
             @RequestParam(defaultValue = "0") int page,

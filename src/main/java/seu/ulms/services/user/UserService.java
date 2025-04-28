@@ -9,6 +9,7 @@ import seu.ulms.entities.user.UserEntity;
 import seu.ulms.mapper.user.UserMapper;
 import seu.ulms.repositoies.user.UserRepository;
 import seu.ulms.services.keycloak.KeycloakAdminService;
+import seu.ulms.util.SecurityUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,5 +92,13 @@ public class UserService {
      public UserEntity getUserEntityByUsername(String username) {
          return userRepository.findByUsername(username)
                  .orElseThrow(() -> new RuntimeException("User not found with username test: " + username));
+     }
+
+     // لعرض بيانات المستخدم الحالي في البروفايل
+     public UserDto getCurrentUser() {
+         String currentUsername = SecurityUtil.getCurrentUserName();
+         UserEntity user = userRepository.findByUsername(currentUsername)
+                 .orElseThrow(() -> new RuntimeException("User not found with username: " + currentUsername));
+         return userMapper.toDto(user);
      }
 }

@@ -18,7 +18,7 @@ public class AttachmentController {
     private final AttachmentService attachmentService;
 
     //  رفع مرفق جديد (يسمح فقط لممثل الجامعة)
-    @PreAuthorize("hasRole('UNIVERSITY_REPRESENTATIVE')")
+//    @PreAuthorize("hasRole('UNIVERSITY_REPRESENTATIVE')")
     @PostMapping("/upload")
     public ResponseEntity<AttachmentEntity> uploadAttachment(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(attachmentService.uploadAttachment(file));

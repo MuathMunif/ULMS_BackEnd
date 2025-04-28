@@ -8,12 +8,20 @@ import seu.ulms.dto.book.BookDto;
 import seu.ulms.entities.book.BookEntity;
 import seu.ulms.entities.book.AttachmentEntity;
 import seu.ulms.entities.book.CategoryEntity;
+import seu.ulms.entities.universty.AccessUniversityEntity;
+import seu.ulms.entities.universty.EStatus;
 import seu.ulms.entities.universty.UniversityEntity;
+import seu.ulms.entities.user.UserEntity;
 import seu.ulms.mapper.book.BookMapper;
+import seu.ulms.mapper.user.UserMapper;
 import seu.ulms.repositoies.book.AttachmentRepository;
 import seu.ulms.repositoies.book.BookRepository;
 import seu.ulms.repositoies.book.CategoryRepository;
+import seu.ulms.repositoies.universty.AccessUniversityRepository;
 import seu.ulms.repositoies.universty.UniversityRepository;
+import seu.ulms.repositoies.user.UserRepository;
+import seu.ulms.services.user.UserService;
+import seu.ulms.util.SecurityUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +35,8 @@ public class BookService {
     private final UniversityRepository universityRepository;
     private final CategoryRepository categoryRepository;
     private final AttachmentRepository attachmentRepository;
+    private final UserService userService;
+    private final AccessUniversityRepository accessUniversityRepository;
 
     // إنشاء أو تحديث كتاب
     public BookDto createOrUpdateBook(BookDto bookDto) {
@@ -112,5 +122,28 @@ public class BookService {
             book.setCategory(category);
         }
         return bookMapper.toDto(bookRepository.save(book));
+    }
+
+
+    public List<BookDto> getBooksForStudentByUniversity(Long universityId) {
+        // 1. جلب المستخدم الحالي
+        UserEntity currentUser = userService.syncUserWithKeycloak(SecurityUtil.getCurrentUserName());
+
+        // 2. جلب علاقة الطالب بالجامعة
+        AccessUniversityEntity accessUniversity = accessUniversityRepository
+                .findByUserAndUniversity(currentUser, universityRepository.findById(universityId)
+                        .orElseThrow(() -> new RuntimeException("University not found")))
+                .orElseThrow(() -> new RuntimeException("You have not requested access to this university"));
+
+        // 3. التحقق من حالة الطلب
+        if (accessUniversity.getStatus() != EStatus.APPROVED) {
+            throw new RuntimeException("Access Denied: Your request to this university is not approved yet.");
+        }
+
+        // 4. جلب الكتب إذا الحالة موافق عليها
+        return bookRepository.findAllByUniversityId(universityId)
+                .stream()
+                .map(bookMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
