@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import seu.ulms.dto.book.BookDto;
+import seu.ulms.dto.book.PublicBookDto;
 import seu.ulms.services.book.AttachmentService;
 import seu.ulms.services.book.BookService;
 
@@ -36,6 +37,11 @@ public class BookController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<BookDto>> getAllBooks(Pageable pageable) {
         return ResponseEntity.ok(bookService.getAllBooks(pageable));
+    }
+
+    @GetMapping("/public_book")
+    public ResponseEntity<Page<PublicBookDto>> getAllBooksToPublic(Pageable pageable) {
+        return ResponseEntity.ok(bookService.getAllBooksToPublic(pageable));
     }
 
     //  جلب جميع الكتب الخاصة بجامعة معينة

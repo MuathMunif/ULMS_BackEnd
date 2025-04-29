@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import seu.ulms.dto.book.BookDto;
+import seu.ulms.dto.book.PublicBookDto;
 import seu.ulms.entities.book.BookEntity;
 import seu.ulms.entities.book.AttachmentEntity;
 import seu.ulms.entities.book.CategoryEntity;
@@ -76,6 +77,11 @@ public class BookService {
     public Page<BookDto> getAllBooks(Pageable pageable) {
         return bookRepository.findAll(pageable)
                 .map(bookMapper::toDto);
+    }
+
+    public Page<PublicBookDto> getAllBooksToPublic(Pageable pageable) {
+        return bookRepository.findAll(pageable)
+                .map(bookMapper::toPublicBookDto);
     }
 
     // جلب جميع الكتب الخاصة بجامعة معينة
