@@ -35,8 +35,8 @@ public class KeycloakAdminClientConfig {
                 .realm(realm)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
-                .username(username)
-                .password(password)
+//                .username(username)
+//                .password(password)
                 .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .build();
     }

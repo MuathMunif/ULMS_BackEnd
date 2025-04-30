@@ -76,11 +76,4 @@ databaseChangeLog:
         referencedColumnNames: id
         referencedTableName: users
         validate: true
-- changeSet:
-    id: 1744185254120-4
-    author: muath (generated)
-    changes:
-    - dropColumn:
-        columnName: data
-        tableName: attachment
 

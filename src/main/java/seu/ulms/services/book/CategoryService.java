@@ -4,12 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import seu.ulms.dto.book.CategoryDto;
 import seu.ulms.entities.book.CategoryEntity;
+import seu.ulms.entities.universty.AccessUniversityEntity;
 import seu.ulms.entities.universty.UniversityEntity;
+import seu.ulms.entities.user.UserEntity;
 import seu.ulms.mapper.book.CategoryMapper;
 import seu.ulms.repositoies.book.CategoryRepository;
+import seu.ulms.repositoies.universty.AccessUniversityRepository;
 import seu.ulms.repositoies.universty.UniversityRepository;
+import seu.ulms.repositoies.user.UserRepository;
+import seu.ulms.util.SecurityUtil;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,9 +25,15 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final UniversityRepository universityRepository;
+    private final UserRepository userRepository;
+    private final AccessUniversityRepository accessUniversityRepository;
 
     // إنشاء تصنيف جديد
     public CategoryDto createCategory(CategoryDto dto) {
+        String currentUsername = SecurityUtil.getCurrentUserName();
+        UserEntity user = userRepository.findByUsername(currentUsername).orElseThrow(() -> new RuntimeException(" User not found with username: " + currentUsername));
+        AccessUniversityEntity accessUniversity = accessUniversityRepository.findByUser(user).orElseThrow(() -> new RuntimeException(" AccessUniversity not found with id: " + user.getId()));
+        dto.setUniversityId(accessUniversity.getUniversity().getId());
         CategoryEntity category = categoryMapper.toEntity(dto);
 
         // تأكد من أن الجامعة موجودة

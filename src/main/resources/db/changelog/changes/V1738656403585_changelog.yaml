@@ -132,7 +132,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         - column:
             name: file_size
-            type: VARCHAR(255)
+            type: BIGINT
         - column:
             name: file_type
             type: VARCHAR(255)

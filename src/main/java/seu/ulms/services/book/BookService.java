@@ -16,6 +16,7 @@ import seu.ulms.entities.book.CategoryEntity;
 import seu.ulms.entities.universty.AccessUniversityEntity;
 import seu.ulms.entities.universty.EStatus;
 import seu.ulms.entities.universty.UniversityEntity;
+import seu.ulms.entities.user.EUserRole;
 import seu.ulms.entities.user.UserEntity;
 import seu.ulms.mapper.book.BookMapper;
 import seu.ulms.repositoies.book.AttachmentRepository;
@@ -48,6 +49,12 @@ public class BookService {
     // إنشاء أو تحديث كتاب
     public BookDto createOrUpdateBook(BookDto bookDto) {
         BookEntity bookEntity = bookMapper.toEntity(bookDto);
+
+        UserEntity currentUser = userService.syncUserWithKeycloak(SecurityUtil.getCurrentUserName());
+        if (currentUser.getUserRole() == EUserRole.REPRESENTATIVE) {
+            AccessUniversityEntity accessUniversity = accessUniversityRepository.findByUser(currentUser).orElseThrow(() -> new RuntimeException("You have not requested access to this university"));
+            bookDto.setUniversityId(accessUniversity.getUniversity().getId());
+        }
 
         // ربط الجامعة
         UniversityEntity university = universityRepository.findById(bookDto.getUniversityId())

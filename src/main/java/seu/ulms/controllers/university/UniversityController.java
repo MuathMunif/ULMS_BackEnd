@@ -41,6 +41,12 @@ public class UniversityController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}")
+    public ResponseEntity<UniversityDto> getUniversity(@PathVariable Long id) {
+        return ResponseEntity.ok(universityService.getUniversity(id));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteUniversity(@PathVariable Long id) {
         universityService.deleteUniversity(id);

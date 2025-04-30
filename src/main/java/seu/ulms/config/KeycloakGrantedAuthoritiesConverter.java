@@ -19,6 +19,7 @@ public class KeycloakGrantedAuthoritiesConverter implements Converter<Jwt, Colle
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         Map<String, Object> resourceAccess = jwt.getClaimAsMap("resource_access");
+        Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
 
         if (resourceAccess != null && resourceAccess.containsKey(CLIENT_ID)) {
             Map<String, Object> clientRoles = (Map<String, Object>) resourceAccess.get(CLIENT_ID);
@@ -31,6 +32,11 @@ public class KeycloakGrantedAuthoritiesConverter implements Converter<Jwt, Colle
                         .map(role -> new SimpleGrantedAuthority(role.toString())) // Keep roles as-is
                         .collect(Collectors.toList());
             }
+        } else if (realmAccess != null && realmAccess.containsKey("roles")) {
+            List<String> roles = (List<String>) realmAccess.get("roles");
+            return roles.stream()
+                    .map(role -> new SimpleGrantedAuthority(role)) // no need to add "ROLE_" if already included
+                    .collect(Collectors.toList());
         }
 
         return Collections.emptyList(); // Return empty if no roles found

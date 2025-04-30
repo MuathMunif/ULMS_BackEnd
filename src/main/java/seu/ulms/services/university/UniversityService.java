@@ -39,6 +39,11 @@ public class UniversityService {
                 .collect(Collectors.toList());
     }
 
+    //  استرجاع جامعة عبر الـ ID كـ UniversityDto
+    public UniversityDto getUniversity(Long id) {
+        return universityRepository.findById(id).map(universityMapper::toDto).orElseThrow(() -> new RuntimeException("University not found with ID: " + id));
+    }
+
     //  حذف جامعة عبر الـ ID
     public void deleteUniversity(Long id) {
         if (!universityRepository.existsById(id)) {
